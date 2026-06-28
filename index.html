@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>URL Diff Tool</title>
+    <script>
+      (function () {
+        try {
+          var savedTheme = window.localStorage.getItem("url-diff-theme");
+          var theme = savedTheme === "light" || savedTheme === "dark"
+            ? savedTheme
+            : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.dataset.theme = theme;
+        } catch (error) {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace" aria-labelledby="page-title">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">URL Diff</p>
+            <h1 id="page-title">Por&oacute;wnaj listy URL-i</h1>
+          </div>
+          <div class="topbar-actions">
+            <button class="icon-button" id="themeButton" type="button" aria-label="W&#322;&#261;cz ciemny motyw" title="W&#322;&#261;cz ciemny motyw">&#9790;</button>
+            <button class="ghost-button" id="clearButton" type="button">Wyczy&#347;&#263;</button>
+          </div>
+        </header>
+
+        <div class="input-grid">
+          <label class="input-panel" for="inputA">
+            <span>Lista A</span>
+            <textarea id="inputA" spellcheck="false" placeholder="example.com&#10;www.example.com/page/"></textarea>
+          </label>
+
+          <label class="input-panel" for="inputB">
+            <span>Lista B</span>
+            <textarea id="inputB" spellcheck="false" placeholder="http://example.com&#10;https://example.com/page"></textarea>
+          </label>
+        </div>
+
+        <div class="action-row">
+          <button class="primary-button" id="compareButton" type="button">Por&oacute;wnaj</button>
+          <p id="summary" class="summary" aria-live="polite">Wklej URL-e po jednym na lini&#281;.</p>
+        </div>
+      </section>
+
+      <section class="results-grid" aria-label="Wyniki por&oacute;wnania">
+        <article class="result-panel">
+          <header>
+            <div class="result-title">
+              <h2>Unikalne w A</h2>
+              <span id="countA">0</span>
+            </div>
+            <button class="copy-button" type="button" data-copy-group="uniqueA" disabled>Kopiuj</button>
+          </header>
+          <ol id="uniqueA" class="url-list"></ol>
+        </article>
+
+        <article class="result-panel">
+          <header>
+            <div class="result-title">
+              <h2>Unikalne w B</h2>
+              <span id="countB">0</span>
+            </div>
+            <button class="copy-button" type="button" data-copy-group="uniqueB" disabled>Kopiuj</button>
+          </header>
+          <ol id="uniqueB" class="url-list"></ol>
+        </article>
+
+        <article class="result-panel">
+          <header>
+            <div class="result-title">
+              <h2>Wsp&oacute;lne</h2>
+              <span id="countCommon">0</span>
+            </div>
+            <button class="copy-button" type="button" data-copy-group="common" disabled>Kopiuj</button>
+          </header>
+          <ol id="common" class="url-list"></ol>
+        </article>
+      </section>
+
+      <section class="invalid-section" aria-label="Niepoprawne wpisy">
+        <details>
+          <summary>Niepoprawne wpisy <span id="countInvalid">0</span></summary>
+          <div class="invalid-grid">
+            <div>
+              <h3>Lista A</h3>
+              <ol id="invalidA" class="url-list compact"></ol>
+            </div>
+            <div>
+              <h3>Lista B</h3>
+              <ol id="invalidB" class="url-list compact"></ol>
+            </div>
+          </div>
+        </details>
+      </section>
+    </main>
+
+    <template id="emptyTemplate">
+      <li class="empty-state">Brak wynik&oacute;w</li>
+    </template>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
