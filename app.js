@@ -67,14 +67,10 @@
     }
 
     const port = url.port && url.port !== "80" && url.port !== "443" ? `:${url.port}` : "";
-    let pathname = url.pathname || "/";
-    if (pathname.length > 1 && pathname.endsWith("/")) {
-      pathname = pathname.slice(0, -1);
-    }
 
     return {
       status: "ok",
-      key: `${hostname}${port}${pathname}${url.search}${url.hash}`,
+      key: `${hostname}${port}`,
       original: trimmed,
     };
   }
